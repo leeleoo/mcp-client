@@ -1,0 +1,17 @@
+{
+  "name": "learning-mcp-server",
+  "version": "1.0.0",
+  "description": "A simple MCP server for learning purposes",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0"
+  },
+  "keywords": ["mcp", "server", "learning", "example"],
+  "author": "",
+  "license": "MIT"
+}

@@ -1,0 +1,30 @@
+{
+  "defaultProvider": "deepseek",
+  "llmProviders": {
+    "deepseek": {
+      "model": "deepseek-chat",
+      "temperature": 0.7,
+      "maxTokens": 2000
+    },
+    "openai": {
+      "model": "gpt-3.5-turbo",
+      "temperature": 0.7,
+      "maxTokens": 2000
+    },
+    "claude": {
+      "model": "claude-3-haiku-20240307",
+      "temperature": 0.7,
+      "maxTokens": 2000
+    }
+  },
+  "servers": [
+    {
+      "name": "learning-server",
+      "type": "stdio",
+      "command": "node",
+      "args": ["mcp-servers/learning-server/index.js"],
+      "description": "Simple MCP server for learning purposes, includes calculator, greeting, text analysis and other features",
+      "autoConnect": true
+    }
+  ]
+}

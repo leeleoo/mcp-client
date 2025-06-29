@@ -1,0 +1,91 @@
+{
+  "defaultProvider": "deepseek",
+  "llmProviders": {
+    "deepseek": {
+      "model": "deepseek-chat",
+      "temperature": 0.7,
+      "maxTokens": 2000
+    },
+    "openai": {
+      "model": "gpt-3.5-turbo",
+      "temperature": 0.7,
+      "maxTokens": 2000
+    },
+    "claude": {
+      "model": "claude-3-haiku-20240307",
+      "temperature": 0.7,
+      "maxTokens": 2000
+    }
+  },
+  "servers": [
+    {
+      "name": "filesystem",
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/path/to/allowed/directory"
+      ],
+      "description": "文件系统服务器，允许访问指定目录",
+      "autoConnect": true
+    },
+    {
+      "name": "sqlite",
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sqlite",
+        "--db-path",
+        "/path/to/database.db"
+      ],
+      "description": "SQLite 数据库服务器",
+      "autoConnect": false
+    },
+    {
+      "name": "brave-search",
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-brave-search"],
+      "env": {
+        "BRAVE_API_KEY": "$BRAVE_API_KEY"
+      },
+      "description": "Brave 搜索服务器，需要 API 密钥",
+      "autoConnect": false
+    },
+    {
+      "name": "github",
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "$GITHUB_PERSONAL_ACCESS_TOKEN"
+      },
+      "description": "GitHub 服务器，需要个人访问令牌",
+      "autoConnect": false
+    },
+    {
+      "name": "web-search",
+      "type": "sse",
+      "url": "http://localhost:3000/sse",
+      "description": "基于 SSE 的网络搜索服务器示例",
+      "autoConnect": false
+    },
+    {
+      "name": "figma",
+      "type": "sse",
+      "url": "http://127.0.0.1:3845/sse",
+      "description": "Figma 设计服务器",
+      "autoConnect": false
+    },
+    {
+      "name": "learning-server",
+      "type": "stdio",
+      "command": "node",
+      "args": ["mcp-servers/learning-server/index.js"],
+      "description": "学习用的简单 MCP 服务器，包含计算器、问候语、文本分析等功能",
+      "autoConnect": true
+    }
+  ]
+}
