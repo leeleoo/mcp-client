@@ -3,7 +3,7 @@ import { getGlobalMCPClient } from "@/lib/global-mcp-client";
 
 export async function GET() {
   try {
-    const mcpClient = getGlobalMCPClient();
+    const mcpClient = await getGlobalMCPClient();
 
     if (!mcpClient) {
       return NextResponse.json(

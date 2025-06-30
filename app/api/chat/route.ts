@@ -11,6 +11,13 @@ export async function POST(request: NextRequest) {
 
     const mcpClient = await getGlobalMCPClient();
 
+    if (!mcpClient) {
+      return NextResponse.json(
+        { error: "MCP client not initialized" },
+        { status: 500 }
+      );
+    }
+
     // 如果指定了提供商，切换到该提供商
     if (provider && provider !== mcpClient.getCurrentProvider().name) {
       try {

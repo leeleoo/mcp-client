@@ -7,7 +7,7 @@ import MultiLLMMCPClient, { MCPServerConfig } from "@/lib/multi-llm-mcp-client";
 dotenv.config();
 
 /**
- * 启动交互式聊天 CLI
+ * Start interactive chat CLI
  */
 async function startCLI(): Promise<void> {
   const chat = new MultiLLMMCPClient();

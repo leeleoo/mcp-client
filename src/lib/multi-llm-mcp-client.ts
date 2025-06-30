@@ -1,6 +1,7 @@
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
 import { SSEClientTransport } from "@modelcontextprotocol/sdk/client/sse.js";
+import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import {
   BaseLLMProvider,
   Message,
@@ -15,7 +16,10 @@ export interface MCPServerConfig {
   command?: string;
   args?: string[];
   url?: string;
-  type: "stdio" | "sse";
+  type: "stdio" | "sse" | "streamable-http";
+  env?: Record<string, string>;
+  description?: string;
+  autoConnect?: boolean;
 }
 
 export interface MCPCapabilities {
@@ -132,10 +136,13 @@ export default class MultiLLMMCPClient {
         });
       } else if (config.type === "sse" && config.url) {
         transport = new SSEClientTransport(new URL(config.url));
+      } else if (config.type === "streamable-http" && config.url) {
+        transport = new StreamableHTTPClientTransport(new URL(config.url));
       } else {
         throw new Error(`Invalid MCP server configuration for ${config.name}`);
       }
 
+      console.log("transport", transport);
       await client.connect(transport);
       this.mcpClients.set(config.name, client);
 
@@ -176,7 +183,7 @@ export default class MultiLLMMCPClient {
    */
   getMCPServerStatus(): MCPServerStatus[] {
     const configServers = this.configManager.getMCPServers();
-    console.log("configServers", configServers);
+    // console.log("configServers", configServers);
     return configServers.map((server) => {
       const client = this.mcpClients.get(server.name);
       const tools = this.availableTools.filter(
@@ -188,7 +195,9 @@ export default class MultiLLMMCPClient {
       const prompts = this.availablePrompts.filter(
         (p) => p.serverName === server.name
       );
-      console.log("client", client);
+      console.log("server", server.name, !!client);
+
+      // console.log("client", client);
       return {
         name: server.name,
         status: client ? "connected" : "disconnected",
@@ -212,22 +221,13 @@ export default class MultiLLMMCPClient {
 
     try {
       // Get available tools
-      const toolsResult = await client.request(
-        { method: "tools/list" },
-        { method: "tools/list", params: {} }
-      );
+      const toolsResult = await client.listTools();
 
       // Get available resources
-      const resourcesResult = await client.request(
-        { method: "resources/list" },
-        { method: "resources/list", params: {} }
-      );
+      const resourcesResult = await client.listResources();
 
       // Get available prompts
-      const promptsResult = await client.request(
-        { method: "prompts/list" },
-        { method: "prompts/list", params: {} }
-      );
+      const promptsResult = await client.listPrompts();
 
       // Update available tools
       this.availableTools = this.availableTools.filter(
@@ -297,10 +297,10 @@ export default class MultiLLMMCPClient {
 
     try {
       console.log(`🔧 Calling tool: ${toolName}`, args);
-      const result = await client.request(
-        { method: "tools/call" },
-        { method: "tools/call", params: { name: toolName, arguments: args } }
-      );
+      const result = await client.callTool({
+        name: toolName,
+        arguments: args,
+      });
       console.log(`✅ Tool call successful: ${toolName}`);
       return result;
     } catch (error) {
@@ -326,10 +326,7 @@ export default class MultiLLMMCPClient {
 
     try {
       console.log(`📄 Reading resource: ${uri}`);
-      const result = await client.request(
-        { method: "resources/read" },
-        { method: "resources/read", params: { uri } }
-      );
+      const result = await client.readResource({ uri });
       console.log(`✅ Resource read successful: ${uri}`);
       return result;
     } catch (error) {
@@ -354,13 +351,10 @@ export default class MultiLLMMCPClient {
 
     try {
       console.log(`💭 Getting prompt: ${promptName}`, args);
-      const result = await client.request(
-        { method: "prompts/get" },
-        {
-          method: "prompts/get",
-          params: { name: promptName, arguments: args || {} },
-        }
-      );
+      const result = await client.getPrompt({
+        name: promptName,
+        arguments: args,
+      });
       console.log(`✅ Prompt get successful: ${promptName}`);
       return result;
     } catch (error) {
@@ -391,7 +385,7 @@ export default class MultiLLMMCPClient {
       }
 
       // Use LLM to generate response
-      const response = await this.currentProvider.generateResponse(
+      const response = await this.currentProvider.sendMessage(
         [systemMessage, ...this.conversation],
         {
           onChunk: onStreamChunk,

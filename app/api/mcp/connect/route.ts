@@ -1,20 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import MultiLLMMCPClient, { MCPServerConfig } from "@/lib/multi-llm-mcp-client";
-
-// Global MCP client instance (shared with chat API)
-let globalMCPClient: MultiLLMMCPClient | null = null;
-
-function getMCPClient() {
-  if (!globalMCPClient) {
-    try {
-      globalMCPClient = new MultiLLMMCPClient();
-    } catch (error) {
-      console.error("Failed to initialize MCP client:", error);
-      return null;
-    }
-  }
-  return globalMCPClient;
-}
+import { MCPServerConfig } from "@/lib/multi-llm-mcp-client";
+import { getGlobalMCPClient } from "@/lib/global-mcp-client";
 
 export async function POST(request: NextRequest) {
   try {
@@ -49,7 +35,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const mcpClient = getMCPClient();
+    const mcpClient = await getGlobalMCPClient();
 
     if (!mcpClient) {
       return NextResponse.json(
@@ -121,7 +107,7 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    const mcpClient = getMCPClient();
+    const mcpClient = await getGlobalMCPClient();
 
     if (!mcpClient) {
       return NextResponse.json(

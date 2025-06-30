@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getCurrentMCPClient } from "@/lib/global-mcp-client";
+import { getGlobalMCPClient } from "@/lib/global-mcp-client";
 
 export async function POST(request: NextRequest) {
   try {
@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const mcpClient = getCurrentMCPClient();
+    const mcpClient = await getGlobalMCPClient();
 
     if (!mcpClient) {
       return NextResponse.json(

@@ -1,0 +1,36 @@
+{
+  "name": "sse-learning-mcp-server",
+  "version": "1.0.0",
+  "description": "SSE学习用MCP服务器，用于演示HTTP/SSE通讯",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node streamable-http-server.js",
+    "start:streamable": "node streamable-http-server.js",
+    "start:sse": "node simple-sse-server.js",
+    "start:old": "node simple-index.js",
+    "start:mcp": "node index.js",
+    "dev": "node --watch streamable-http-server.js",
+    "dev:sse": "node --watch simple-sse-server.js",
+    "dev:old": "node --watch simple-index.js",
+    "dev:mcp": "node --watch index.js",
+    "test": "node simple-test.js",
+    "test:mcp": "node test.js"
+  },
+  "keywords": [
+    "mcp",
+    "sse",
+    "learning",
+    "example"
+  ],
+  "author": "MCP Learning Project",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.13.2",
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

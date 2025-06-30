@@ -3,7 +3,7 @@ const nextConfig = {
   // 启用实验性的 Turbopack
   experimental: {
     turbo: {
-      // Turbopack 特定配置
+      // 基本的 Turbopack 配置
     },
   },
 
@@ -20,18 +20,19 @@ const nextConfig = {
   // API 路由配置在 App Router 中不再需要这个配置
   // Next.js 14+ 使用 Route Handlers 替代 API Routes
 
-  // Webpack 配置（Turbopack 备用）
-  webpack: (config, { isServer }) => {
-    if (!isServer) {
-      config.resolve.fallback = {
-        ...config.resolve.fallback,
-        fs: false,
-        net: false,
-        tls: false,
-      };
-    }
-    return config;
-  },
+  // Webpack 配置（仅在 Turbopack 不可用时作为备用）
+  // webpack: (config, { isServer }) => {
+  //   // 仅在非 Turbopack 模式下使用
+  //   if (!isServer) {
+  //     config.resolve.fallback = {
+  //       ...config.resolve.fallback,
+  //       fs: false,
+  //       net: false,
+  //       tls: false,
+  //     };
+  //   }
+  //   return config;
+  // },
 };
 
 module.exports = nextConfig;

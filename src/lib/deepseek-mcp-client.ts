@@ -2,6 +2,7 @@ import axios from "axios";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
 import { SSEClientTransport } from "@modelcontextprotocol/sdk/client/sse.js";
+import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 
 export interface Message {
   role: "user" | "assistant" | "system";
@@ -22,7 +23,7 @@ export interface MCPServerConfig {
   command?: string;
   args?: string[];
   url?: string;
-  type: "stdio" | "sse";
+  type: "stdio" | "sse" | "streamable-http";
 }
 
 export interface MCPCapabilities {
@@ -55,7 +56,7 @@ export default class DeepSeekMCPClient {
    * 连接到 MCP 服务器
    */
   async connectToMCPServer(config: MCPServerConfig): Promise<void> {
-    console.log(`正在连接到 MCP 服务器: ${config.name}...`);
+    console.log(`连接到 MCP 服务器: ${config.name}...`);
 
     try {
       const client = new Client(
@@ -77,10 +78,13 @@ export default class DeepSeekMCPClient {
         });
       } else if (config.type === "sse" && config.url) {
         transport = new SSEClientTransport(new URL(config.url));
+      } else if (config.type === "streamable-http" && config.url) {
+        transport = new StreamableHTTPClientTransport(new URL(config.url));
       } else {
         throw new Error(`Invalid MCP server configuration for ${config.name}`);
       }
 
+      console.log("transport", transport);
       await client.connect(transport);
       this.mcpClients.set(config.name, client);
 

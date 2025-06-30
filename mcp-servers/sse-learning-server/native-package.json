@@ -1,0 +1,30 @@
+{
+  "name": "native-streamable-http-mcp-server",
+  "version": "1.0.0",
+  "description": "原生 Streamable HTTP MCP Server 实现，不使用第三方库，用于学习 MCP 协议",
+  "main": "native-streamable-http-server.js",
+  "scripts": {
+    "start": "node native-streamable-http-server.js",
+    "test": "node native-test.js",
+    "dev": "node native-streamable-http-server.js"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "streamable-http",
+    "native-implementation",
+    "learning",
+    "educational"
+  ],
+  "author": "Learning Purpose",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "本地学习项目"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

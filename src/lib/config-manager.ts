@@ -1,8 +1,5 @@
-import { MCPServerConfig } from "@/lib/deepseek-mcp-client";
+import { MCPServerConfig } from "@/lib/multi-llm-mcp-client";
 import config from "../mcp-servers.json";
-import fs from "fs";
-import path from "path";
-import os from "os";
 
 export interface AppConfig {
   llmProviders: {
@@ -39,43 +36,28 @@ interface ConfigFile {
 }
 
 export class ConfigManager {
-  private configPath: string;
   private config: ConfigFile;
 
   constructor(configPath?: string) {
-    this.configPath =
-      configPath || path.join(process.cwd(), "src", "mcp-servers.json");
-
-    // Default configuration
+    // Use imported config directly with proper type casting
     this.config = {
-      defaultProvider: "deepseek",
-      llmProviders: {},
-      servers: [],
+      defaultProvider: config.defaultProvider || "deepseek",
+      llmProviders: config.llmProviders || {},
+      servers: (config.servers || []) as MCPServerConfig[],
     };
 
     // Load LLM provider configurations from environment variables
     this.loadLLMProvidersFromEnv();
 
-    try {
-      this.loadFromFile();
-    } catch (error) {
-      console.warn("Failed to load config file, using default configuration");
-    }
+    // Process the imported configuration
+    this.processImportedConfig();
   }
 
-  private loadFromFile(): void {
-    if (!fs.existsSync(this.configPath)) {
-      console.warn(`Config file not found: ${this.configPath}`);
-      return;
-    }
-
+  private processImportedConfig(): void {
     try {
-      const fileContent = fs.readFileSync(this.configPath, "utf-8");
-      const fileConfig = JSON.parse(fileContent);
-
-      // Load MCP server configuration from JSON file
-      if (fileConfig.servers && Array.isArray(fileConfig.servers)) {
-        this.config.servers = fileConfig.servers.map(
+      // Load MCP server configuration from imported config
+      if (this.config.servers && Array.isArray(this.config.servers)) {
+        this.config.servers = this.config.servers.map(
           (server: any): MCPServerConfig => {
             // Process environment variables (safer approach)
             if (server.env) {
@@ -87,10 +69,10 @@ export class ConfigManager {
         );
       }
 
-      // Merge LLM provider configurations from file (don't override environment variables)
-      if (fileConfig.llmProviders) {
+      // Merge LLM provider configurations from imported config (don't override environment variables)
+      if (this.config.llmProviders) {
         for (const [name, providerConfig] of Object.entries(
-          fileConfig.llmProviders
+          this.config.llmProviders
         )) {
           if (!this.config.llmProviders![name]) {
             this.config.llmProviders![name] =
@@ -99,15 +81,9 @@ export class ConfigManager {
         }
       }
 
-      // Update default provider
-      if (fileConfig.defaultProvider) {
-        this.config.defaultProvider = fileConfig.defaultProvider;
-      }
-
-      // console.log(`Successfully loaded config file: ${this.configPath}`);
+      console.log("Successfully processed imported config");
     } catch (error) {
-      // If config file doesn't exist or is corrupted, shouldn't crash, use default configuration instead
-      console.warn(`Failed to parse config file: ${this.configPath}`, error);
+      console.warn("Failed to process imported config:", error);
     }
   }
 
@@ -193,7 +169,7 @@ export class ConfigManager {
         const envVarName = value.slice(1);
         if (!envVarName || !/^[A-Za-z_][A-Za-z0-9_]*$/.test(envVarName)) {
           console.warn(
-            `Warning: Skip invalid environment variable reference: ${envVar}`
+            `Warning: Skip invalid environment variable reference: ${value}`
           );
           continue;
         }
@@ -269,21 +245,6 @@ export class ConfigManager {
     return this.config.servers!.length < initialLength;
   }
 
-  // Save configuration to file
-  public saveToFile(): void {
-    try {
-      // Create config directory if it doesn't exist
-      const configDir = path.dirname(this.configPath);
-      if (!fs.existsSync(configDir)) {
-        fs.mkdirSync(configDir, { recursive: true });
-      }
-
-      // Write configuration
-      fs.writeFileSync(this.configPath, JSON.stringify(this.config, null, 2));
-      console.log(`Configuration saved to: ${this.configPath}`);
-    } catch (error) {
-      console.error(`Failed to save configuration: ${error}`);
-      throw error;
-    }
-  }
+  // Note: Configuration is now read-only from imported JSON
+  // Dynamic server management is handled in memory only
 }

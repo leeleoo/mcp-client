@@ -25,6 +25,27 @@
       "args": ["mcp-servers/learning-server/index.js"],
       "description": "Simple MCP server for learning purposes, includes calculator, greeting, text analysis and other features",
       "autoConnect": true
+    },
+    {
+      "name": "streamable-http-learning-server",
+      "type": "streamable-http",
+      "url": "http://localhost:3002/mcp",
+      "description": "Streamable HTTP-based MCP server for learning purposes, includes web search, weather info, URL analysis and more (latest protocol)",
+      "autoConnect": true
+    },
+    {
+      "name": "sse-learning-server",
+      "type": "sse",
+      "url": "http://localhost:3003/sse",
+      "description": "SSE-based MCP server (legacy protocol) - for compatibility with older servers",
+      "autoConnect": false
+    },
+    {
+      "name": "external-api-server",
+      "type": "streamable-http",
+      "url": "http://api.example.com/mcp",
+      "description": "External MCP server with advanced capabilities",
+      "autoConnect": false
     }
   ]
 }
