@@ -1,124 +1,124 @@
-# DeepSeek MCP Client - Next.js Web 应用
+# DeepSeek MCP Client - Next.js Web Application
 
-DeepSeek MCP Client 是一个基于 Next.js 和 Model Context Protocol (MCP) 的现代化智能聊天 Web 应用，集成了 DeepSeek API。通过 MCP 协议，客户端可以连接到各种外部工具和资源，为 AI 对话提供更丰富的功能。
+DeepSeek MCP Client is a modern intelligent chat web application based on Next.js and Model Context Protocol (MCP), integrated with DeepSeek API. Through the MCP protocol, the client can connect to various external tools and resources, providing richer functionality for AI conversations.
 
-## 功能特性
+## Features
 
-- 🌐 **现代化 Web 界面**: 基于 Next.js 和 Tailwind CSS 的响应式设计
-- 🚀 **Turbopack 支持**: 极速开发体验，使用 Next.js 14 的 Turbopack
-- 🤖 **DeepSeek AI 集成**: 使用 DeepSeek 的强大语言模型
-- 🔧 **MCP 协议支持**: 连接和使用各种 MCP 服务器
-- 🌊 **实时流式响应**: 支持 Server-Sent Events 的实时对话体验
-- 🛠️ **工具调用**: AI 可以调用外部工具执行任务
-- 📄 **资源访问**: 读取和处理外部资源
-- 💭 **提示管理**: 使用预定义的提示模板
-- 🔄 **多服务器支持**: 同时连接多个 MCP 服务器
-- 📱 **响应式设计**: 完美适配桌面和移动设备
-- ⚡ **实时状态监控**: MCP 服务器连接状态实时显示
+- 🌐 **Modern Web Interface**: Responsive design based on Next.js and Tailwind CSS
+- 🚀 **Turbopack Support**: Lightning-fast development experience with Next.js 14's Turbopack
+- 🤖 **DeepSeek AI Integration**: Powered by DeepSeek's powerful language models
+- 🔧 **MCP Protocol Support**: Connect and use various MCP servers
+- 🌊 **Real-time Streaming Responses**: Real-time conversation experience with Server-Sent Events
+- 🛠️ **Tool Calling**: AI can call external tools to perform tasks
+- 📄 **Resource Access**: Read and process external resources
+- 💭 **Prompt Management**: Use predefined prompt templates
+- 🔄 **Multi-server Support**: Connect to multiple MCP servers simultaneously
+- 📱 **Responsive Design**: Perfect adaptation for desktop and mobile devices
+- ⚡ **Real-time Status Monitoring**: Real-time display of MCP server connection status
 
-## 快速开始
+## Quick Start
 
-### 环境要求
+### Requirements
 
 - Node.js 18+
-- npm 或 yarn
+- npm or yarn
 - DeepSeek API Key
 
-### 安装步骤
+### Installation Steps
 
-1. **克隆项目**
+1. **Clone the Project**
 
    ```bash
    git clone <repository-url>
    cd deepseek-mcp-client-nextjs
    ```
 
-2. **安装依赖**
+2. **Install Dependencies**
 
    ```bash
    npm install
    ```
 
-3. **配置环境变量**
+3. **Configure Environment Variables**
 
-   创建 `.env.local` 文件：
+   Create a `.env.local` file:
 
    ```bash
    deepseek_api=your_deepseek_api_key_here
-   # 或者使用
+   # or use
    DEEPSEEK_API_KEY=your_deepseek_api_key_here
    ```
 
-4. **启动开发服务器**
+4. **Start Development Server**
 
    ```bash
    npm run dev
    ```
 
-5. **访问应用**
+5. **Access the Application**
 
-   打开浏览器访问 [http://localhost:3000](http://localhost:3000)
+   Open your browser and visit [http://localhost:3000](http://localhost:3000)
 
-### 命令行版本（可选）
+### Command Line Version (Optional)
 
-如果你更喜欢命令行界面，仍然可以使用：
+If you prefer a command line interface, you can still use:
 
 ```bash
 npm run cli
 ```
 
-## 使用指南
+## Usage Guide
 
-### Web 界面
+### Web Interface
 
-1. **发送消息**: 在底部输入框中输入消息，按 Enter 发送
-2. **查看 MCP 状态**: 点击右上角设置图标查看已连接的 MCP 服务器
-3. **流式响应**: AI 回复会以打字效果实时显示
-4. **MCP 功能**: AI 会自动调用可用的 MCP 工具和资源
+1. **Send Messages**: Type your message in the bottom input box and press Enter to send
+2. **View MCP Status**: Click the settings icon in the top right corner to view connected MCP servers
+3. **Streaming Responses**: AI replies are displayed in real-time with typing effect
+4. **MCP Features**: AI will automatically call available MCP tools and resources
 
-### MCP 集成
+### MCP Integration
 
-AI 可以通过特殊命令调用 MCP 功能：
+AI can call MCP functions through special commands:
 
-- `[MCP_TOOL:工具名称:参数JSON]` - 调用工具
-- `[MCP_RESOURCE:资源URI]` - 读取资源
-- `[MCP_PROMPT:提示名称:参数JSON]` - 获取提示
+- `[MCP_TOOL:tool_name:parameter_JSON]` - Call tools
+- `[MCP_RESOURCE:resource_URI]` - Read resources
+- `[MCP_PROMPT:prompt_name:parameter_JSON]` - Get prompts
 
-### API 端点
+### API Endpoints
 
-- `POST /api/chat` - 聊天接口，支持 SSE 流式响应
-- `GET /api/mcp/status` - 获取 MCP 服务器状态
-- `POST /api/mcp/connect` - 连接 MCP 服务器
-- `DELETE /api/mcp/connect` - 断开 MCP 服务器
+- `POST /api/chat` - Chat interface with SSE streaming response support
+- `GET /api/mcp/status` - Get MCP server status
+- `POST /api/mcp/connect` - Connect to MCP server
+- `DELETE /api/mcp/connect` - Disconnect MCP server
 
-## 项目结构
+## Project Structure
 
 ```
 deepseek-mcp-client-nextjs/
 ├── app/                          # Next.js App Router
-│   ├── api/                      # API 路由
-│   │   ├── chat/                 # 聊天 API
-│   │   └── mcp/                  # MCP 管理 API
-│   ├── globals.css               # 全局样式
-│   ├── layout.tsx                # 根布局
-│   └── page.tsx                  # 主页面
+│   ├── api/                      # API routes
+│   │   ├── chat/                 # Chat API
+│   │   └── mcp/                  # MCP management API
+│   ├── globals.css               # Global styles
+│   ├── layout.tsx                # Root layout
+│   └── page.tsx                  # Main page
 ├── src/
 │   ├── lib/
-│   │   └── deepseek-mcp-client.ts # MCP 客户端库
-│   └── cli.ts                    # 命令行版本
-├── package.json                  # 项目配置和依赖
-├── next.config.js                # Next.js 配置
-├── tailwind.config.js            # Tailwind CSS 配置
-├── tsconfig.json                 # TypeScript 配置
-└── mcp-servers.example.json      # MCP 服务器配置示例
+│   │   └── deepseek-mcp-client.ts # MCP client library
+│   └── cli.ts                    # Command line version
+├── package.json                  # Project configuration and dependencies
+├── next.config.js                # Next.js configuration
+├── tailwind.config.js            # Tailwind CSS configuration
+├── tsconfig.json                 # TypeScript configuration
+└── mcp-servers.example.json      # MCP server configuration example
 ```
 
-## MCP 服务器连接示例
+## MCP Server Connection Examples
 
-### 文件系统服务器 (stdio)
+### Filesystem Server (stdio)
 
 ```bash
-# 通过 API 连接
+# Connect via API
 curl -X POST http://localhost:3000/api/mcp/connect \
   -H "Content-Type: application/json" \
   -d '{
@@ -129,7 +129,7 @@ curl -X POST http://localhost:3000/api/mcp/connect \
   }'
 ```
 
-### 数据库服务器 (stdio)
+### Database Server (stdio)
 
 ```bash
 curl -X POST http://localhost:3000/api/mcp/connect \
@@ -142,7 +142,7 @@ curl -X POST http://localhost:3000/api/mcp/connect \
   }'
 ```
 
-### SSE 服务器
+### SSE Server
 
 ```bash
 curl -X POST http://localhost:3000/api/mcp/connect \
@@ -154,141 +154,141 @@ curl -X POST http://localhost:3000/api/mcp/connect \
   }'
 ```
 
-## 部署
+## Deployment
 
-### 构建生产版本
+### Build Production Version
 
 ```bash
 npm run build
 npm start
 ```
 
-### 部署到 Vercel
+### Deploy to Vercel
 
-1. 将代码推送到 GitHub
-2. 在 Vercel 中导入项目
-3. 设置环境变量 `DEEPSEEK_API_KEY`
-4. 部署完成
+1. Push code to GitHub
+2. Import project in Vercel
+3. Set environment variable `DEEPSEEK_API_KEY`
+4. Deploy
 
-### 部署到其他平台
+### Deploy to Other Platforms
 
-项目支持部署到任何支持 Node.js 的平台，如：
+The project supports deployment to any platform that supports Node.js, such as:
 
 - Vercel
 - Netlify
 - Railway
 - Docker
 
-## 开发
+## Development
 
-### 开发模式（使用 Turbopack）
+### Development Mode (with Turbopack)
 
 ```bash
 npm run dev
 ```
 
-### 构建
+### Build
 
 ```bash
 npm run build
 ```
 
-### 启动生产服务器
+### Start Production Server
 
 ```bash
 npm start
 ```
 
-### 代码检查
+### Code Linting
 
 ```bash
 npm run lint
 ```
 
-## 技术栈
+## Tech Stack
 
-- **前端**: Next.js 14, React 18, TypeScript
-- **样式**: Tailwind CSS, Lucide React Icons
-- **构建**: Turbopack (开发), Webpack (生产)
+- **Frontend**: Next.js 14, React 18, TypeScript
+- **Styling**: Tailwind CSS, Lucide React Icons
+- **Build**: Turbopack (development), Webpack (production)
 - **AI**: DeepSeek API
-- **协议**: Model Context Protocol (MCP)
-- **部署**: Vercel (推荐)
+- **Protocol**: Model Context Protocol (MCP)
+- **Deployment**: Vercel (recommended)
 
-## 支持的 MCP 服务器
+## Supported MCP Servers
 
-本客户端支持所有标准的 MCP 服务器，包括但不限于：
+This client supports all standard MCP servers, including but not limited to:
 
-- **@modelcontextprotocol/server-filesystem** - 文件系统访问
-- **@modelcontextprotocol/server-sqlite** - SQLite 数据库
-- **@modelcontextprotocol/server-brave-search** - Brave 搜索
-- **@modelcontextprotocol/server-github** - GitHub 集成
-- **@modelcontextprotocol/server-postgres** - PostgreSQL 数据库
-- **@modelcontextprotocol/server-fetch** - HTTP 请求
-- 以及其他所有兼容 MCP 协议的服务器
+- **@modelcontextprotocol/server-filesystem** - Filesystem access
+- **@modelcontextprotocol/server-sqlite** - SQLite database
+- **@modelcontextprotocol/server-brave-search** - Brave search
+- **@modelcontextprotocol/server-github** - GitHub integration
+- **@modelcontextprotocol/server-postgres** - PostgreSQL database
+- **@modelcontextprotocol/server-fetch** - HTTP requests
+- And all other MCP protocol-compatible servers
 
-## 常见问题
+## FAQ
 
-### Q: 如何获取 DeepSeek API Key?
+### Q: How to get DeepSeek API Key?
 
-A: 访问 [DeepSeek 官网](https://platform.deepseek.com) 注册账号并获取 API Key。
+A: Visit [DeepSeek Platform](https://platform.deepseek.com) to register an account and get your API Key.
 
-### Q: 支持哪些 MCP 服务器?
+### Q: Which MCP servers are supported?
 
-A: 支持所有符合 MCP 规范的服务器，包括文件系统、数据库、API 调用、搜索引擎等。
+A: All servers that comply with MCP specifications are supported, including filesystem, database, API calls, search engines, etc.
 
-### Q: 如何在生产环境中使用?
+### Q: How to use in production environment?
 
-A: 构建项目后部署到支持 Node.js 的平台，并正确设置环境变量。
+A: Build the project and deploy it to a platform that supports Node.js, and set environment variables correctly.
 
-### Q: 可以自定义 UI 吗?
+### Q: Can I customize the UI?
 
-A: 是的，项目使用 Tailwind CSS，可以轻松自定义样式和布局。
+A: Yes, the project uses Tailwind CSS, so you can easily customize styles and layout.
 
-### Q: 如何添加新的 MCP 服务器?
+### Q: How to add new MCP servers?
 
-A: 通过 Web 界面的设置面板或直接调用 `/api/mcp/connect` API 端点。
+A: Through the settings panel in the web interface or by directly calling the `/api/mcp/connect` API endpoint.
 
-## 故障排除
+## Troubleshooting
 
-### 常见问题
+### Common Issues
 
-1. **连接 MCP 服务器失败**
+1. **MCP Server Connection Failed**
 
-   - 检查服务器命令和参数是否正确
-   - 确保必要的环境变量已设置
-   - 验证服务器是否已安装
+   - Check if server command and arguments are correct
+   - Ensure necessary environment variables are set
+   - Verify the server is installed
 
-2. **DeepSeek API 调用失败**
+2. **DeepSeek API Call Failed**
 
-   - 检查环境变量中的 API 密钥是否正确
-   - 确认网络连接正常
-   - 检查 API 配额是否用完
+   - Check if API key in environment variables is correct
+   - Confirm network connection is working
+   - Check if API quota is exhausted
 
-3. **Web 界面无法访问**
-   - 确认开发服务器已启动
-   - 检查端口 3000 是否被占用
-   - 查看控制台错误信息
+3. **Web Interface Not Accessible**
+   - Confirm development server is started
+   - Check if port 3000 is occupied
+   - Check console error messages
 
-## 许可证
+## License
 
 ISC License
 
-## 贡献
+## Contributing
 
-欢迎提交 Issues 和 Pull Requests！
+Issues and Pull Requests are welcome!
 
-## 更新日志
+## Changelog
 
-### v2.0.0 (当前版本)
+### v2.0.0 (Current)
 
-- 🌐 重构为 Next.js Web 应用
-- 🚀 添加 Turbopack 支持
-- 🎨 现代化 UI 设计
-- 🌊 SSE 流式响应
-- 📱 响应式设计
+- 🌐 Refactored as Next.js Web application
+- 🚀 Added Turbopack support
+- 🎨 Modern UI design
+- 🌊 SSE streaming responses
+- 📱 Responsive design
 
 ### v1.0.0
 
-- 🤖 基础 CLI 版本
-- 🔧 MCP 协议支持
-- 🔄 多服务器连接
+- 🤖 Basic CLI version
+- 🔧 MCP protocol support
+- 🔄 Multi-server connections
